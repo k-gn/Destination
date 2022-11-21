@@ -19,6 +19,6 @@
    ██║   ██╔══██╗██║██╔═══╝
    ██║   ██║  ██║██║██║
    ╚═╝   ╚═╝  ╚═╝╚═╝╚═╝
-                                 
+
 
 spring boot version - ${spring-boot.version}

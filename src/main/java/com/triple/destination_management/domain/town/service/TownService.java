@@ -1,13 +1,8 @@
 package com.triple.destination_management.domain.town.service;
 
-import java.util.Objects;
-
-import javax.validation.Valid;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.triple.destination_management.domain.town.dto.TownModifyRequest;
 import com.triple.destination_management.domain.town.dto.TownRequest;
 import com.triple.destination_management.domain.town.dto.TownResponse;
 import com.triple.destination_management.domain.town.entity.Town;
@@ -45,11 +40,16 @@ public class TownService {
 	/**
 	 * 도시 수정하기
 	 */
-	public void modify(
+	@Transactional
+	public TownResponse modify(
 		Long townId,
-		TownModifyRequest townModifyRequest
+		TownRequest townRequest
 	) {
-
+		Town town = getTownById(townId);
+		town.setCountry(townRequest.getCountry());
+		town.setArea(townRequest.getArea());
+		town.setName(townRequest.getName());
+		return TownResponse.entityToDto(town);
 	}
 
 	/**

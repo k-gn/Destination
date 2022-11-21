@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.triple.destination_management.domain.town.dto.TownModifyRequest;
 import com.triple.destination_management.domain.town.dto.TownRequest;
 import com.triple.destination_management.domain.town.service.TownService;
 import com.triple.destination_management.global.dto.ApiDataResponse;
@@ -40,9 +39,9 @@ public class TownController {
 	@PutMapping("/{townId}")
 	public ResponseEntity<?> modify(
 		@PathVariable Long townId,
-		@RequestBody TownModifyRequest townModifyRequest
+		@Valid @RequestBody TownRequest townRequest
 	) {
-		return ResponseEntity.ok(ApiDataResponse.of(""));
+		return ResponseEntity.ok(ApiDataResponse.of(townService.modify(townId, townRequest)));
 	}
 
 	/**
