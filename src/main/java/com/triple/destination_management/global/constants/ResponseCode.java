@@ -16,9 +16,8 @@ public enum ResponseCode {
 	// 4xx error case
 	BAD_REQUEST(400, ResponseCategory.CLIENT_SIDE, "Bad request"),
 	VALIDATION_ERROR(400, ResponseCategory.CLIENT_SIDE, "Validation error"),
-	NOT_FOUND(400, ResponseCategory.CLIENT_SIDE, "Requested resource is not found"),
-	ACCESS_DENIED(400, ResponseCategory.CLIENT_SIDE, "Access denied"),
-	DB_DATA_NOT_FOUND(400, ResponseCategory.CLIENT_SIDE, "Data is not found"),
+	NOT_FOUND(400, ResponseCategory.CLIENT_SIDE, "Resource is not found"),
+	DUPLICATED_REQUEST(400, ResponseCategory.CLIENT_SIDE, "Duplicated request"),
 	TYPE_MISS_MATCHED(400, ResponseCategory.CLIENT_SIDE, "Type miss matched"),
 
 	// 5xx error case
