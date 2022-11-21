@@ -29,35 +29,35 @@ public class TownController {
 	 * 도시 등록하기
 	 */
 	@PostMapping
-	public ResponseEntity<?> register(@Valid @RequestBody TownRequest townRequest) {
-		return ResponseEntity.ok(ApiDataResponse.of(townService.register(townRequest)));
+	public ResponseEntity<?> registerTown(@Valid @RequestBody TownRequest townRequest) {
+		return ResponseEntity.ok(ApiDataResponse.of(townService.registerTown(townRequest)));
 	}
 
 	/**
 	 * 도시 수정하기
 	 */
 	@PutMapping("/{townId}")
-	public ResponseEntity<?> modify(
+	public ResponseEntity<?> modifyTown(
 		@PathVariable Long townId,
 		@Valid @RequestBody TownRequest townRequest
 	) {
-		return ResponseEntity.ok(ApiDataResponse.of(townService.modify(townId, townRequest)));
+		return ResponseEntity.ok(ApiDataResponse.of(townService.modifyTown(townId, townRequest)));
 	}
 
 	/**
 	 * 도시 삭제하기
 	 */
 	@DeleteMapping("/{townId}")
-	public ResponseEntity<?> remove(@PathVariable Long townId) {
-		return ResponseEntity.ok(ApiDataResponse.of(""));
+	public ResponseEntity<?> removeTown(@PathVariable Long townId) {
+		return ResponseEntity.ok(ApiDataResponse.of(townService.removeTown(townId)));
 	}
 
 	/**
 	 * 단일 도시 조회하기
 	 */
 	@GetMapping("/{townId}")
-	public ResponseEntity<?> findOne(@PathVariable Long townId) {
-		return ResponseEntity.ok(ApiDataResponse.of(""));
+	public ResponseEntity<?> findTown(@PathVariable Long townId) {
+		return ResponseEntity.ok(ApiDataResponse.of(townService.findTown(townId)));
 	}
 
 	/**

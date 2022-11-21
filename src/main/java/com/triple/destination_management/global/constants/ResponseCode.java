@@ -19,6 +19,7 @@ public enum ResponseCode {
 	NOT_FOUND(400, ResponseCategory.CLIENT_SIDE, "Resource is not found"),
 	DUPLICATED_REQUEST(400, ResponseCategory.CLIENT_SIDE, "Duplicated request"),
 	TYPE_MISS_MATCHED(400, ResponseCategory.CLIENT_SIDE, "Type miss matched"),
+	REMOVE_DEPENDENCY(400, ResponseCategory.CLIENT_SIDE, "remove town dependency"),
 
 	// 5xx error case
 	INTERNAL_ERROR(500, ResponseCategory.SERVER_SIDE, "Internal error"),
