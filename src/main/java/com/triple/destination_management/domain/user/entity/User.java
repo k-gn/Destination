@@ -1,21 +1,15 @@
-package com.triple.destination_management.domain.trip.entity;
-
-import java.time.LocalDateTime;
+package com.triple.destination_management.domain.user.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.triple.destination_management.domain.town.entity.Town;
 import com.triple.destination_management.global.entity.BaseEntity;
 
 import lombok.AllArgsConstructor;
@@ -34,24 +28,21 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "t_trip")
-public class Trip extends BaseEntity {
+@Table(name = "t_user")
+public class User extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "trip_id")
+	@Column(name = "user_id")
 	private Long id;
 
-	@Column(name = "trip_start_date", columnDefinition = "datetime")
-	private LocalDateTime startDate;
+	@Column(name = "user_username", columnDefinition = "varchar(100)", unique = true)
+	private String username;
 
-	@Column(name = "trip_end_date", columnDefinition = "datetime")
-	private LocalDateTime endDate;
+	@Column(name = "user_password", columnDefinition = "varchar(200)")
+	private String password;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "town_id")
-	private Town town;
+	@Column(name = "user_name", columnDefinition = "varchar(100)")
+	private String name;
 
-	@Column(name = "user_id")
-	private Long user;
 }

@@ -30,7 +30,7 @@ public class TripController {
 	 */
 	@PostMapping
 	public ResponseEntity<?> registerTrip(@Valid @RequestBody TripRequest tripRequest) {
-		return ResponseEntity.ok(ApiDataResponse.of(""));
+		return ResponseEntity.ok(ApiDataResponse.of(tripService.registerTrip(tripRequest)));
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class TripController {
 		@PathVariable Long tripId,
 		@Valid @RequestBody TripRequest tripRequest
 	) {
-		return ResponseEntity.ok(ApiDataResponse.of(""));
+		return ResponseEntity.ok(ApiDataResponse.of(tripService.modifyTrip(tripId, tripRequest)));
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class TripController {
 	 */
 	@DeleteMapping("/{tripId}")
 	public ResponseEntity<?> removeTrip(@PathVariable Long tripId) {
-		return ResponseEntity.ok(ApiDataResponse.of(""));
+		return ResponseEntity.ok(ApiDataResponse.of(tripService.removeTrip(tripId)));
 	}
 
 	/**
@@ -57,6 +57,6 @@ public class TripController {
 	 */
 	@GetMapping("/{tripId}")
 	public ResponseEntity<?> findTrip(@PathVariable Long tripId) {
-		return ResponseEntity.ok(ApiDataResponse.of(""));
+		return ResponseEntity.ok(ApiDataResponse.of(tripService.findTrip(tripId)));
 	}
 }

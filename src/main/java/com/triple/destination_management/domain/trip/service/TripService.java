@@ -1,5 +1,7 @@
 package com.triple.destination_management.domain.trip.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +12,7 @@ import com.triple.destination_management.domain.trip.dto.TripRequest;
 import com.triple.destination_management.domain.trip.dto.TripResponse;
 import com.triple.destination_management.domain.trip.entity.Trip;
 import com.triple.destination_management.domain.trip.exception.TripDateException;
+import com.triple.destination_management.domain.trip.exception.TripDuplicatedException;
 import com.triple.destination_management.domain.trip.exception.TripNotFoundException;
 import com.triple.destination_management.domain.trip.repository.TripRepository;
 
@@ -32,6 +35,9 @@ public class TripService {
 		if (isStartDateAfterEndDate(tripRequest))
 			throw new TripDateException();
 
+		if (isDuplicateTrip(tripRequest.getStartDate(), 1L))
+			throw new TripDuplicatedException();
+
 		Town town = getTownById(tripRequest.getTownId());
 		Trip trip = TripRequest.dtoToEntity(tripRequest);
 		trip.setTown(town);
@@ -50,6 +56,9 @@ public class TripService {
 	) {
 		if (isStartDateAfterEndDate(tripRequest))
 			throw new TripDateException();
+
+		if (isDuplicateTrip(tripRequest.getStartDate(), 1L))
+			throw new TripDuplicatedException();
 
 		Town town = getTownById(tripRequest.getTownId());
 		Trip trip = getTripById(tripId);
@@ -77,8 +86,17 @@ public class TripService {
 	/**
 	 * 단일 여행 조회하기
 	 */
-	public void findTrip() {
+	public TripResponse findTrip(Long tripId) {
+		Trip trip = getTripById(tripId);
+		return TripResponse.entityToDto(trip);
+	}
 
+	private boolean isDuplicateTrip(
+		LocalDateTime startDate,
+		Long user
+	) {
+		return tripRepository.findFirstByEndDateLessThanEqualAndUser(startDate, user).isPresent()
+			&& tripRepository.findFirstByStartDateGreaterThanEqualAndUser(startDate, user).isPresent();
 	}
 
 	private boolean isStartDateAfterEndDate(TripRequest tripRequest) {
