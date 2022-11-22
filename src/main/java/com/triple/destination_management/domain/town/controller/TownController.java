@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/town")
+@RequestMapping("/api/v1/towns")
 public class TownController {
 
 	private final TownService townService;
@@ -67,5 +67,4 @@ public class TownController {
 	public ResponseEntity<?> findAll() {
 		return ResponseEntity.ok(ApiDataResponse.of(""));
 	}
-
 }
