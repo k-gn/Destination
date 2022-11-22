@@ -6,6 +6,6 @@ import com.triple.destination_management.global.exception.GeneralException;
 public class TownDuplicatedException extends GeneralException {
 
 	public TownDuplicatedException() {
-		super(ResponseCode.DUPLICATED_REQUEST.getMessage());
+		super(ResponseCode.DUPLICATED_REQUEST);
 	}
 }

@@ -48,15 +48,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			ex, ResponseCode.INTERNAL_ERROR, HttpHeaders.EMPTY, HttpStatus.INTERNAL_SERVER_ERROR, request);
 	}
 
-	@ExceptionHandler
-	public ResponseEntity<Object> validation(
-		ConstraintViolationException ex,
-		WebRequest request
-	) {
-		return handleExceptionInternal(
-			ex, ResponseCode.VALIDATION_ERROR, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request);
-	}
-
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 		MethodArgumentNotValidException ex,
