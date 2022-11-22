@@ -1,7 +1,6 @@
 package com.triple.destination_management.domain.trip.repository;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,12 +39,12 @@ class TripRepositoryTest {
 		Town savedTown = townRepository.save(town);
 
 		Trip trip = Trip.builder()
-			.town(savedTown)
+			.destination(savedTown)
 			.build();
 		Trip savedTrip = tripRepository.save(trip);
 
 		// when
-		Trip dbTrip = tripRepository.findFirstByTown(savedTown).orElse(null);
+		Trip dbTrip = tripRepository.findFirstByDestination(savedTown).orElse(null);
 
 		// then
 		assertThat(dbTrip)

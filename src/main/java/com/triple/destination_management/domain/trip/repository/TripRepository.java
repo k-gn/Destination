@@ -7,18 +7,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.triple.destination_management.domain.town.entity.Town;
 import com.triple.destination_management.domain.trip.entity.Trip;
+import com.triple.destination_management.domain.user.entity.User;
 
 public interface TripRepository extends JpaRepository<Trip, Long> {
 
-	Optional<Trip> findFirstByTown(Town town);
+	Optional<Trip> findFirstByDestination(Town destination);
 
-	Optional<Trip> findFirstByStartDateGreaterThanEqualAndUser(
+	Optional<Trip> findFirstByStartDateLessThanEqualAndUser(
 		LocalDateTime startDate,
-		Long user
+		User user
 	);
 
-	Optional<Trip> findFirstByEndDateLessThanEqualAndUser(
+	Optional<Trip> findFirstByEndDateGreaterThanEqualAndUser(
 		LocalDateTime startDate,
-		Long user
+		User user
 	);
 }

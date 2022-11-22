@@ -20,10 +20,11 @@ import com.triple.destination_management.domain.town.exception.TownDependencyExc
 import com.triple.destination_management.domain.town.exception.TownDuplicatedException;
 import com.triple.destination_management.domain.town.exception.TownNotFoundException;
 import com.triple.destination_management.domain.town.service.TownService;
+import com.triple.destination_management.global.config.security.jwt.JwtProvider;
 import com.triple.destination_management.global.constants.ResponseCode;
 import com.triple.destination_management.global.exception.GeneralException;
 
-@ActiveProfiles("local")
+@ActiveProfiles("dev")
 @DisplayName("** [ TownControllerTest ] **")
 @WebMvcTest(TownController.class)
 class TownControllerTest {
@@ -34,6 +35,9 @@ class TownControllerTest {
 
 	@MockBean
 	private TownService townService;
+
+	@MockBean
+	private JwtProvider jwtProvider;
 
 	public TownControllerTest(
 		@Autowired MockMvc mvc,
@@ -52,12 +56,13 @@ class TownControllerTest {
 		given(townService.registerTown(townRequest)).willReturn(townResponse);
 
 		// when & then
-		mvc.perform(post("/town")
+		mvc.perform(post("/api/v1/towns")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(townRequest)))
 			.andExpect(status().is2xxSuccessful())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.data").value(townResponse))
+			.andExpect(jsonPath("$.data.name").value(townResponse.getName()))
+			.andExpect(jsonPath("$.data.country").value(townResponse.getCountry()))
 			.andExpect(jsonPath("$.success").value(true))
 			.andExpect(jsonPath("$.code").value(ResponseCode.OK.getCode()))
 			.andExpect(jsonPath("$.message").value(ResponseCode.OK.getMessage()))
@@ -74,7 +79,7 @@ class TownControllerTest {
 		given(townService.registerTown(townRequest)).willThrow(new TownDuplicatedException());
 
 		// when & then
-		mvc.perform(post("/town")
+		mvc.perform(post("/api/v1/towns")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(townRequest)))
 			.andExpect(status().is4xxClientError())
@@ -95,7 +100,7 @@ class TownControllerTest {
 		given(townService.registerTown(townRequest)).willThrow(new GeneralException(ResponseCode.VALIDATION_ERROR));
 
 		// when & then
-		mvc.perform(post("/town")
+		mvc.perform(post("/api/v1/towns")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(townRequest)))
 			.andExpect(status().is4xxClientError())
@@ -117,14 +122,13 @@ class TownControllerTest {
 		given(townService.registerTown(townRequest)).willThrow(new GeneralException(ResponseCode.VALIDATION_ERROR));
 
 		// when & then
-		mvc.perform(post("/town")
+		mvc.perform(post("/api/v1/towns")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(townRequest)))
 			.andExpect(status().is4xxClientError())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$.success").value(false))
 			.andExpect(jsonPath("$.code").value(ResponseCode.VALIDATION_ERROR.getCode()))
-			// TODO: 예외 메시지 가져올 수 있는 방법 찾아보기
 			.andExpect(jsonPath("$.message").value("도시명을 입력해주세요!"))
 		;
 
@@ -141,12 +145,13 @@ class TownControllerTest {
 		given(townService.modifyTown(townId, townRequest)).willReturn(townResponse);
 
 		// when & then
-		mvc.perform(put("/town/" + townId)
+		mvc.perform(put("/api/v1/towns/" + townId)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(townRequest)))
 			.andExpect(status().is2xxSuccessful())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.data").value(townResponse))
+			.andExpect(jsonPath("$.data.name").value(townResponse.getName()))
+			.andExpect(jsonPath("$.data.country").value(townResponse.getCountry()))
 			.andExpect(jsonPath("$.success").value(true))
 			.andExpect(jsonPath("$.code").value(ResponseCode.OK.getCode()))
 			.andExpect(jsonPath("$.message").value(ResponseCode.OK.getMessage()))
@@ -164,7 +169,7 @@ class TownControllerTest {
 		given(townService.modifyTown(townId, townRequest)).willThrow(new TownNotFoundException());
 
 		// when & then
-		mvc.perform(put("/town/" + townId)
+		mvc.perform(put("/api/v1/towns/" + townId)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(townRequest)))
 			.andExpect(status().is4xxClientError())
@@ -187,14 +192,13 @@ class TownControllerTest {
 			new GeneralException(ResponseCode.VALIDATION_ERROR));
 
 		// when & then
-		mvc.perform(put("/town/" + townId)
+		mvc.perform(put("/api/v1/towns/" + townId)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(townRequest)))
 			.andExpect(status().is4xxClientError())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$.success").value(false))
 			.andExpect(jsonPath("$.code").value(ResponseCode.VALIDATION_ERROR.getCode()))
-			// TODO: 예외 메시지 가져올 수 있는 방법 찾아보기
 			.andExpect(jsonPath("$.message").value("국가를 입력해주세요!"))
 		;
 
@@ -211,14 +215,13 @@ class TownControllerTest {
 			new GeneralException(ResponseCode.VALIDATION_ERROR));
 
 		// when & then
-		mvc.perform(put("/town/" + townId)
+		mvc.perform(put("/api/v1/towns/" + townId)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(townRequest)))
 			.andExpect(status().is4xxClientError())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$.success").value(false))
 			.andExpect(jsonPath("$.code").value(ResponseCode.VALIDATION_ERROR.getCode()))
-			// TODO: 예외 메시지 가져올 수 있는 방법 찾아보기
 			.andExpect(jsonPath("$.message").value("도시명을 입력해주세요!"))
 		;
 
@@ -233,7 +236,7 @@ class TownControllerTest {
 		given(townService.removeTown(townId)).willReturn(townId);
 
 		// when & then
-		mvc.perform(delete("/town/" + townId)
+		mvc.perform(delete("/api/v1/towns/" + townId)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().is2xxSuccessful())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -254,7 +257,7 @@ class TownControllerTest {
 		given(townService.removeTown(townId)).willThrow(new TownDependencyException());
 
 		// when & then
-		mvc.perform(delete("/town/" + townId)
+		mvc.perform(delete("/api/v1/towns/" + townId)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().is4xxClientError())
 			.andExpect(jsonPath("$.success").value(false))
@@ -274,11 +277,12 @@ class TownControllerTest {
 		given(townService.findTown(townId)).willReturn(townResponse);
 
 		// when & then
-		mvc.perform(get("/town/" + townId)
+		mvc.perform(get("/api/v1/towns/" + townId)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().is2xxSuccessful())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.data").value(townResponse))
+			.andExpect(jsonPath("$.data.name").value(townResponse.getName()))
+			.andExpect(jsonPath("$.data.country").value(townResponse.getCountry()))
 			.andExpect(jsonPath("$.success").value(true))
 			.andExpect(jsonPath("$.code").value(ResponseCode.OK.getCode()))
 			.andExpect(jsonPath("$.message").value(ResponseCode.OK.getMessage()))
@@ -295,7 +299,7 @@ class TownControllerTest {
 		given(townService.findTown(townId)).willThrow(new TownNotFoundException());
 
 		// when & then
-		mvc.perform(get("/town/" + townId)
+		mvc.perform(get("/api/v1/towns/" + townId)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().is4xxClientError())
 			.andExpect(jsonPath("$.success").value(false))

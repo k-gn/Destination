@@ -16,13 +16,16 @@ import com.triple.destination_management.domain.town.entity.Town;
 import com.triple.destination_management.domain.town.repository.TownRepository;
 import com.triple.destination_management.domain.trip.dto.TripRequest;
 import com.triple.destination_management.domain.trip.dto.TripResponse;
+import com.triple.destination_management.domain.user.constants.Auth;
+import com.triple.destination_management.domain.user.entity.User;
+import com.triple.destination_management.domain.user.repository.UserRepository;
 import com.triple.destination_management.global.config.JpaConfig;
 import com.triple.destination_management.global.constants.ResponseCode;
 import com.triple.destination_management.global.exception.GeneralException;
 
 @ActiveProfiles("dev")
 @DataJpaTest
-@DisplayName("** [ TownServiceTest ] **")
+@DisplayName("** [ TripServiceTest ] **")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({JpaConfig.class, TripService.class})
 class TripServiceTest {
@@ -32,6 +35,9 @@ class TripServiceTest {
 
 	@Autowired
 	private TownRepository townRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Test
 	@DisplayName("# [1-1] 여행 등록하기")
@@ -81,13 +87,17 @@ class TripServiceTest {
 		// given
 		Town town = getTownEntity("서울", "대한민국");
 		Town savedTown = townRepository.save(town);
+
+		User user = getUser();
+		User savedUser = userRepository.save(user);
+
 		LocalDateTime start = getDateTime(5);
 		LocalDateTime end = getDateTime(10);
 		TripRequest tripRequest = getTripRequest(savedTown.getId(), start, end);
-		TripResponse tripResponse = tripService.registerTrip(tripRequest);
+		TripResponse tripResponse = tripService.registerTrip(tripRequest, savedUser.getId());
 
 		// when
-		Long removedTripId = tripService.removeTrip(tripResponse.getId());
+		Long removedTripId = tripService.removeTrip(tripResponse.getId(), savedUser.getId());
 
 		// then
 		assertThat(removedTripId)
@@ -99,15 +109,22 @@ class TripServiceTest {
 	@DisplayName("# [3-2] 존재하지 않는 여행 삭제하기")
 	void removeNotExistTrip() {
 		// given
+		User user = getUser();
+		User savedUser = userRepository.save(user);
+
 		Long tripId = -99999L;
 
 		// when
-		Throwable thrown = catchThrowable(() -> tripService.removeTrip(tripId));
+		Throwable thrown = catchThrowable(() -> tripService.removeTrip(tripId, savedUser.getId()));
 
 		// then
 		assertThat(thrown)
 			.isInstanceOf(GeneralException.class)
 			.hasMessageContaining(ResponseCode.NOT_FOUND.getMessage());
+	}
+
+	private User getUser() {
+		return User.builder().username("gyul").password("1234").name("김규남").role(Auth.ROLE_USER).build();
 	}
 
 	@Test
@@ -116,10 +133,14 @@ class TripServiceTest {
 		// given
 		Town town = getTownEntity("부산", "대한민국");
 		Town savedTown = townRepository.save(town);
+
+		User user = getUser();
+		User savedUser = userRepository.save(user);
+
 		LocalDateTime start = getDateTime(5);
 		LocalDateTime end = getDateTime(10);
 		TripRequest saveRequest = getTripRequest(savedTown.getId(), start, end);
-		TripResponse saveResponse = tripService.registerTrip(saveRequest);
+		TripResponse saveResponse = tripService.registerTrip(saveRequest, savedUser.getId());
 
 		// when
 		TripResponse tripResponse = tripService.findTrip(saveResponse.getId());

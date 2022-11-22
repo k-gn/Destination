@@ -14,7 +14,11 @@ import com.triple.destination_management.domain.trip.entity.Trip;
 import com.triple.destination_management.domain.trip.exception.TripDateException;
 import com.triple.destination_management.domain.trip.exception.TripDuplicatedException;
 import com.triple.destination_management.domain.trip.exception.TripNotFoundException;
+import com.triple.destination_management.domain.trip.exception.TripRemoveAuthException;
 import com.triple.destination_management.domain.trip.repository.TripRepository;
+import com.triple.destination_management.domain.user.entity.User;
+import com.triple.destination_management.domain.user.exception.UserNotFoundException;
+import com.triple.destination_management.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,22 +31,27 @@ public class TripService {
 
 	private final TripRepository tripRepository;
 
+	private final UserRepository userRepository;
+
 	/**
 	 * 여행 등록하기
 	 */
 	@Transactional
-	public TripResponse registerTrip(TripRequest tripRequest) {
+	public TripResponse registerTrip(
+		TripRequest tripRequest,
+		Long userId
+	) {
 		if (isStartDateAfterEndDate(tripRequest))
 			throw new TripDateException();
 
-		if (isDuplicateTrip(tripRequest.getStartDate(), 1L))
-			throw new TripDuplicatedException();
-
+		User user = getUserById(userId);
 		Town town = getTownById(tripRequest.getTownId());
-		Trip trip = TripRequest.dtoToEntity(tripRequest);
-		trip.setTown(town);
-		Trip savedTrip = tripRepository.save(trip);
 
+		Trip trip = TripRequest.dtoToEntity(tripRequest);
+		trip.setDestination(town);
+		trip.setUser(user);
+
+		Trip savedTrip = tripRepository.save(trip);
 		return TripResponse.entityToDto(savedTrip);
 	}
 
@@ -52,19 +61,23 @@ public class TripService {
 	@Transactional
 	public TripResponse modifyTrip(
 		Long tripId,
+		Long userId,
 		TripRequest tripRequest
 	) {
 		if (isStartDateAfterEndDate(tripRequest))
 			throw new TripDateException();
 
-		if (isDuplicateTrip(tripRequest.getStartDate(), 1L))
-			throw new TripDuplicatedException();
-
-		Town town = getTownById(tripRequest.getTownId());
+		User user = getUserById(userId);
 		Trip trip = getTripById(tripId);
+
+		if (isNotSameUser(trip, user))
+			throw new TripRemoveAuthException();
+
 		trip.setStartDate(tripRequest.getStartDate());
 		trip.setStartDate(tripRequest.getEndDate());
-		trip.setTown(town);
+
+		Town town = getTownById(tripRequest.getTownId());
+		trip.setDestination(town);
 
 		return TripResponse.entityToDto(trip);
 	}
@@ -77,10 +90,29 @@ public class TripService {
 	 * 여행 삭제하기
 	 */
 	@Transactional
-	public Long removeTrip(Long tripId) {
+	public Long removeTrip(
+		Long tripId,
+		Long userId
+	) {
 		Trip trip = getTripById(tripId);
+		User user = getUserById(userId);
+
+		if (isNotSameUser(trip, user))
+			throw new TripRemoveAuthException();
+
 		tripRepository.delete(trip);
 		return trip.getId();
+	}
+
+	private boolean isNotSameUser(
+		Trip trip,
+		User user
+	) {
+		return !trip.getUser().getId().equals(user.getId());
+	}
+
+	private User getUserById(Long userId) {
+		return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 	}
 
 	/**
@@ -89,14 +121,6 @@ public class TripService {
 	public TripResponse findTrip(Long tripId) {
 		Trip trip = getTripById(tripId);
 		return TripResponse.entityToDto(trip);
-	}
-
-	private boolean isDuplicateTrip(
-		LocalDateTime startDate,
-		Long user
-	) {
-		return tripRepository.findFirstByEndDateLessThanEqualAndUser(startDate, user).isPresent()
-			&& tripRepository.findFirstByStartDateGreaterThanEqualAndUser(startDate, user).isPresent();
 	}
 
 	private boolean isStartDateAfterEndDate(TripRequest tripRequest) {

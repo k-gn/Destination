@@ -3,6 +3,7 @@ package com.triple.destination_management.domain.trip.controller;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +30,11 @@ public class TripController {
 	 * 도시에 여행 등록하기
 	 */
 	@PostMapping
-	public ResponseEntity<?> registerTrip(@Valid @RequestBody TripRequest tripRequest) {
-		return ResponseEntity.ok(ApiDataResponse.of(tripService.registerTrip(tripRequest)));
+	public ResponseEntity<?> registerTrip(
+		@Valid @RequestBody TripRequest tripRequest,
+		@AuthenticationPrincipal Long userId
+	) {
+		return ResponseEntity.ok(ApiDataResponse.of(tripService.registerTrip(tripRequest, userId)));
 	}
 
 	/**
@@ -39,17 +43,21 @@ public class TripController {
 	@PutMapping("/{tripId}")
 	public ResponseEntity<?> modifyTrip(
 		@PathVariable Long tripId,
+		@AuthenticationPrincipal Long userId,
 		@Valid @RequestBody TripRequest tripRequest
 	) {
-		return ResponseEntity.ok(ApiDataResponse.of(tripService.modifyTrip(tripId, tripRequest)));
+		return ResponseEntity.ok(ApiDataResponse.of(tripService.modifyTrip(tripId, userId, tripRequest)));
 	}
 
 	/**
 	 * 여행 삭제하기
 	 */
 	@DeleteMapping("/{tripId}")
-	public ResponseEntity<?> removeTrip(@PathVariable Long tripId) {
-		return ResponseEntity.ok(ApiDataResponse.of(tripService.removeTrip(tripId)));
+	public ResponseEntity<?> removeTrip(
+		@PathVariable Long tripId,
+		@AuthenticationPrincipal Long userId
+	) {
+		return ResponseEntity.ok(ApiDataResponse.of(tripService.removeTrip(tripId, userId)));
 	}
 
 	/**

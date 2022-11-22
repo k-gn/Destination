@@ -19,6 +19,8 @@ public class TripResponse {
 
 	private Long id;
 
+	private String startPoint;
+
 	private LocalDateTime startDate;
 
 	private LocalDateTime endDate;
@@ -32,11 +34,12 @@ public class TripResponse {
 	public static TripResponse entityToDto(Trip trip) {
 		return TripResponse.builder()
 			.id(trip.getId())
+			.startPoint(trip.getStartPoint())
 			.startDate(trip.getStartDate())
 			.endDate(trip.getEndDate())
-			.name(trip.getTown().getName())
-			.country(trip.getTown().getCountry())
-			.area(trip.getTown().getArea())
+			.name(trip.getDestination().getName())
+			.country(trip.getDestination().getCountry())
+			.area(trip.getDestination().getArea())
 			.build();
 	}
 }

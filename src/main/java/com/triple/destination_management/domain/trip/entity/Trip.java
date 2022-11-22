@@ -16,6 +16,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.triple.destination_management.domain.town.entity.Town;
+import com.triple.destination_management.domain.user.entity.User;
 import com.triple.destination_management.global.entity.BaseEntity;
 
 import lombok.AllArgsConstructor;
@@ -42,6 +43,9 @@ public class Trip extends BaseEntity {
 	@Column(name = "trip_id")
 	private Long id;
 
+	@Column(name = "trip_start_point", columnDefinition = "varchar(100)")
+	private String startPoint;
+
 	@Column(name = "trip_start_date", columnDefinition = "datetime")
 	private LocalDateTime startDate;
 
@@ -50,8 +54,9 @@ public class Trip extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "town_id")
-	private Town town;
+	private Town destination;
 
-	@Column(name = "user_id")
-	private Long user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 }
