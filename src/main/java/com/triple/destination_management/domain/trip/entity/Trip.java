@@ -1,14 +1,21 @@
 package com.triple.destination_management.domain.trip.entity;
 
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.triple.destination_management.domain.town.entity.Town;
 import com.triple.destination_management.global.entity.BaseEntity;
 
 import lombok.AllArgsConstructor;
@@ -32,5 +39,16 @@ public class Trip extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "trip_id")
 	private Long id;
+
+	@Column(name = "trip_start_date", columnDefinition = "datetime")
+	private LocalDateTime startDate;
+
+	@Column(name = "trip_end_date", columnDefinition = "datetime")
+	private LocalDateTime endDate;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "town_id")
+	private Town town;
 }

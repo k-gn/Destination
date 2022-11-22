@@ -44,4 +44,7 @@ public class Town extends BaseEntity {
 
 	@Column(name = "town_name", columnDefinition = "varchar(100)")
 	private String name;
+
+	@Column(name = "town_code", columnDefinition = "varchar(100)", unique = true)
+	private Integer code;
 }
