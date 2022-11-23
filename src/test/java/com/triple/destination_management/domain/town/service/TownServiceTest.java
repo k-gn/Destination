@@ -190,7 +190,7 @@ class TownServiceTest {
 
 	private Trip getTrip(Long townId) {
 		return Trip.builder()
-			.destination(Town.builder().id(townId).build())
+			.town(Town.builder().id(townId).build())
 			.build();
 	}
 

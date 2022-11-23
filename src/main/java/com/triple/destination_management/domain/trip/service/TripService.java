@@ -1,7 +1,5 @@
 package com.triple.destination_management.domain.trip.service;
 
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +10,6 @@ import com.triple.destination_management.domain.trip.dto.TripRequest;
 import com.triple.destination_management.domain.trip.dto.TripResponse;
 import com.triple.destination_management.domain.trip.entity.Trip;
 import com.triple.destination_management.domain.trip.exception.TripDateException;
-import com.triple.destination_management.domain.trip.exception.TripDuplicatedException;
 import com.triple.destination_management.domain.trip.exception.TripNotFoundException;
 import com.triple.destination_management.domain.trip.exception.TripRemoveAuthException;
 import com.triple.destination_management.domain.trip.repository.TripRepository;
@@ -48,7 +45,7 @@ public class TripService {
 		Town town = getTownById(tripRequest.getTownId());
 
 		Trip trip = TripRequest.dtoToEntity(tripRequest);
-		trip.setDestination(town);
+		trip.setTown(town);
 		trip.setUser(user);
 
 		Trip savedTrip = tripRepository.save(trip);
@@ -74,11 +71,10 @@ public class TripService {
 			throw new TripRemoveAuthException();
 
 		trip.setStartDate(tripRequest.getStartDate());
-		trip.setStartDate(tripRequest.getEndDate());
+		trip.setEndDate(tripRequest.getEndDate());
 
 		Town town = getTownById(tripRequest.getTownId());
-		trip.setDestination(town);
-
+		trip.setTown(town);
 		return TripResponse.entityToDto(trip);
 	}
 
@@ -118,8 +114,12 @@ public class TripService {
 	/**
 	 * 단일 여행 조회하기
 	 */
-	public TripResponse findTrip(Long tripId) {
-		Trip trip = getTripById(tripId);
+	public TripResponse findTrip(
+		Long tripId,
+		Long userId
+	) {
+		User user = getUserById(userId);
+		Trip trip = tripRepository.findTripByUserAndId(user, tripId).orElseThrow(TownNotFoundException::new);
 		return TripResponse.entityToDto(trip);
 	}
 

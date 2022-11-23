@@ -68,28 +68,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	@DisplayName("# [1-2]-[POST] 유저 중복 회원가입하기")
-	void registerDuplicatedUser() throws Exception {
-		// given
-		UserRequest userRequest = getUserRequest();
-		given(userService.registerUser(userRequest)).willThrow(new UserDuplicatedException());
-
-		// when & then
-		mvc.perform(post("/api/v1/users")
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(userRequest)))
-			.andExpect(status().is4xxClientError())
-			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.success").value(false))
-			.andExpect(jsonPath("$.code").value(ResponseCode.DUPLICATED_REQUEST.getCode()))
-			.andExpect(jsonPath("$.message").value(ResponseCode.DUPLICATED_REQUEST.getMessage()))
-		;
-
-		then(userService).should().registerUser(userRequest);
-	}
-
-	@Test
-	@DisplayName("# [1-3]-[POST] 아이디 미입력 후 회원가입하기")
+	@DisplayName("# [1-2]-[POST] 아이디 미입력 후 회원가입하기")
 	void registerUserWithoutUsername() throws Exception {
 		// given
 		UserRequest userRequest = UserRequest.builder().name("김규남").password("1234").build();
@@ -111,7 +90,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	@DisplayName("# [1-4]-[POST] 비밀번호 미입력 후 회원가입하기")
+	@DisplayName("# [1-3]-[POST] 비밀번호 미입력 후 회원가입하기")
 	void registerUserWithoutPassword() throws Exception {
 		// given
 		UserRequest userRequest = UserRequest.builder().name("김규남").username("gyul").build();
@@ -132,7 +111,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	@DisplayName("# [1-5]-[POST] 이름 미입력 후 회원가입하기")
+	@DisplayName("# [1-4]-[POST] 이름 미입력 후 회원가입하기")
 	void registerUserWithoutName() throws Exception {
 		// given
 		UserRequest userRequest = UserRequest.builder().username("gyul").password("1234").build();

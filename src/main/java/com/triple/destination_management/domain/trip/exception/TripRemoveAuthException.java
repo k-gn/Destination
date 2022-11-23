@@ -6,6 +6,6 @@ import com.triple.destination_management.global.exception.GeneralException;
 public class TripRemoveAuthException extends GeneralException {
 
 	public TripRemoveAuthException() {
-		super(ResponseCode.NOT_FOUND);
+		super(ResponseCode.ACCESS_DENIED);
 	}
 }

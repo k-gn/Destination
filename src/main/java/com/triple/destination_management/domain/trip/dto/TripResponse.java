@@ -2,6 +2,7 @@ package com.triple.destination_management.domain.trip.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.triple.destination_management.domain.trip.entity.Trip;
 
@@ -19,10 +20,10 @@ public class TripResponse {
 
 	private Long id;
 
-	private String startPoint;
-
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd a HH:mm:ss")
 	private LocalDateTime startDate;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd a HH:mm:ss")
 	private LocalDateTime endDate;
 
 	private String name;
@@ -34,12 +35,11 @@ public class TripResponse {
 	public static TripResponse entityToDto(Trip trip) {
 		return TripResponse.builder()
 			.id(trip.getId())
-			.startPoint(trip.getStartPoint())
 			.startDate(trip.getStartDate())
 			.endDate(trip.getEndDate())
-			.name(trip.getDestination().getName())
-			.country(trip.getDestination().getCountry())
-			.area(trip.getDestination().getArea())
+			.name(trip.getTown().getName())
+			.country(trip.getTown().getCountry())
+			.area(trip.getTown().getArea())
 			.build();
 	}
 }

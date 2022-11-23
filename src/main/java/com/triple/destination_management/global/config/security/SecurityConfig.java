@@ -27,10 +27,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private static final String[] USER_ALLOWED_URI_PATTERN = new String[] {
-		"/api/v1/trip/**"
-	};
-
 	private final JwtProvider jwtProvider;
 
 	@Bean
@@ -48,8 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.disable();
 
 		http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), jwtProvider),
-				UsernamePasswordAuthenticationFilter.class
-			)
+			UsernamePasswordAuthenticationFilter.class
+		)
 			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), jwtProvider),
 				BasicAuthenticationFilter.class
 			);
@@ -57,7 +53,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.authorizeRequests()
-			// .antMatchers(USER_ALLOWED_URI_PATTERN).hasRole("USER")
 			.anyRequest().permitAll();
 
 		http.exceptionHandling()

@@ -62,7 +62,7 @@ public class TownService {
 	@Transactional
 	public Long removeTown(Long townId) {
 		Town town = getTownById(townId);
-		if (tripRepository.findFirstByDestination(town).isEmpty()) {
+		if (tripRepository.findFirstByTown(town).isEmpty()) {
 			townRepository.delete(town);
 			return town.getId();
 		} else {
