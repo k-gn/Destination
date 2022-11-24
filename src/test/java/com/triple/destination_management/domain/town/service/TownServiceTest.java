@@ -19,18 +19,25 @@ import com.triple.destination_management.global.config.JpaConfig;
 import com.triple.destination_management.global.constants.ResponseCode;
 import com.triple.destination_management.global.exception.GeneralException;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @DataJpaTest
 @DisplayName("** [ TownServiceTest ] **")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({JpaConfig.class, TownService.class})
 class TownServiceTest {
 
-	@Autowired
-	private TownService townService;
+	private final TownService townService;
 
-	@Autowired
-	private TripRepository tripRepository;
+	private final TripRepository tripRepository;
+
+	public TownServiceTest(
+		@Autowired TownService townService,
+		@Autowired TripRepository tripRepository
+	) {
+
+		this.townService = townService;
+		this.tripRepository = tripRepository;
+	}
 
 	@Test
 	@DisplayName("# [1-1] 도시 등록하기")

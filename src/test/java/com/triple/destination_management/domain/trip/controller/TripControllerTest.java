@@ -29,7 +29,7 @@ import com.triple.destination_management.global.config.security.jwt.JwtProvider;
 import com.triple.destination_management.global.constants.ResponseCode;
 import com.triple.destination_management.global.exception.GeneralException;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @DisplayName("** [ TripControllerTest ] **")
 @WebMvcTest(TripController.class)
 @Import({JwtProvider.class})
@@ -59,7 +59,7 @@ class TripControllerTest {
 	}
 
 	@BeforeEach
-	public void initToken() {
+	public void init() {
 		User user = User.builder()
 			.id(1L)
 			.username("gyul")
@@ -191,6 +191,30 @@ class TripControllerTest {
 		// when & then
 		mvc.perform(post("/api/v1/trips")
 			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(tripRequest)))
+			.andExpect(status().is4xxClientError())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.success").value(false))
+			.andExpect(jsonPath("$.code").value(ResponseCode.ACCESS_DENIED.getCode()))
+			.andExpect(jsonPath("$.message").value(ResponseCode.ACCESS_DENIED.getMessage()))
+		;
+
+		then(tripService).should(never()).registerTrip(tripRequest, userId);
+	}
+
+	@Test
+	@DisplayName("# [1-6]-[POST] 잘못된 토큰으로 여행 등록하기")
+	void registerTripWithWrongToken() throws Exception {
+		// given
+		Long userId = 1L;
+		LocalDateTime startDate = LocalDateTime.now().plusDays(5);
+		LocalDateTime endDate = LocalDateTime.now().plusDays(10);
+		TripRequest tripRequest = getTripRequest(startDate, endDate);
+
+		// when & then
+		mvc.perform(post("/api/v1/trips")
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(JwtProperties.JWT_ACCESS_HEADER, JwtProperties.TOKEN_PREFIX + "wrong token")
 			.content(objectMapper.writeValueAsString(tripRequest)))
 			.andExpect(status().is4xxClientError())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -338,6 +362,31 @@ class TripControllerTest {
 	}
 
 	@Test
+	@DisplayName("# [2-6]-[PUT] 잘못된 토큰으로 여행 수정하기")
+	void modifyTripWithWrongToken() throws Exception {
+		// given
+		Long userId = 1L;
+		Long tripId = 1L;
+		LocalDateTime startDate = LocalDateTime.now().plusDays(5);
+		LocalDateTime endDate = LocalDateTime.now().plusDays(10);
+		TripRequest tripRequest = getTripRequest(startDate, endDate);
+
+		// when & then
+		mvc.perform(put("/api/v1/trips/" + tripId)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(JwtProperties.JWT_ACCESS_HEADER, JwtProperties.TOKEN_PREFIX + "wrong token")
+			.content(objectMapper.writeValueAsString(tripRequest)))
+			.andExpect(status().is4xxClientError())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.success").value(false))
+			.andExpect(jsonPath("$.code").value(ResponseCode.ACCESS_DENIED.getCode()))
+			.andExpect(jsonPath("$.message").value(ResponseCode.ACCESS_DENIED.getMessage()))
+		;
+
+		then(tripService).should(never()).modifyTrip(tripId, userId, tripRequest);
+	}
+
+	@Test
 	@DisplayName("# [3-1]-[DELETE] 여행 삭제하기")
 	void removeTrip() throws Exception {
 		// given
@@ -381,6 +430,27 @@ class TripControllerTest {
 	}
 
 	@Test
+	@DisplayName("# [3-3]-[DELETE] 잘못된 토큰으로 여행 삭제하기")
+	void removeTripWithWrongToken() throws Exception {
+		// given
+		Long userId = 1L;
+		Long tripId = 1L;
+
+		// when & then
+		mvc.perform(delete("/api/v1/trips/" + tripId)
+			.header(JwtProperties.JWT_ACCESS_HEADER, JwtProperties.TOKEN_PREFIX + "wrong token")
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().is4xxClientError())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.success").value(false))
+			.andExpect(jsonPath("$.code").value(ResponseCode.ACCESS_DENIED.getCode()))
+			.andExpect(jsonPath("$.message").value(ResponseCode.ACCESS_DENIED.getMessage()))
+		;
+
+		then(tripService).should(never()).removeTrip(tripId, userId);
+	}
+
+	@Test
 	@DisplayName("# [4-1]-[GET] 단일 여행 조회하기")
 	void findTrip() throws Exception {
 		// given
@@ -412,7 +482,7 @@ class TripControllerTest {
 
 	@Test
 	@DisplayName("# [4-2]-[GET] 토큰 없이 단일 여행 조회하기")
-	void findTripWithToken() throws Exception {
+	void findTripWithoutToken() throws Exception {
 		// given
 		Long tripId = 1L;
 		Long userId = 1L;
@@ -420,6 +490,27 @@ class TripControllerTest {
 		// when & then
 		mvc.perform(get("/api/v1/trips/" + tripId)
 			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().is4xxClientError())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.success").value(false))
+			.andExpect(jsonPath("$.code").value(ResponseCode.ACCESS_DENIED.getCode()))
+			.andExpect(jsonPath("$.message").value(ResponseCode.ACCESS_DENIED.getMessage()))
+		;
+
+		then(tripService).should(never()).findTrip(tripId, userId);
+	}
+
+	@Test
+	@DisplayName("# [4-3]-[GET] 잘못된 토큰으로 단일 여행 조회하기")
+	void findTripWithWrongToken() throws Exception {
+		// given
+		Long tripId = 1L;
+		Long userId = 1L;
+
+		// when & then
+		mvc.perform(get("/api/v1/trips/" + tripId)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(JwtProperties.JWT_ACCESS_HEADER, JwtProperties.TOKEN_PREFIX + "wrong token"))
 			.andExpect(status().is4xxClientError())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$.success").value(false))

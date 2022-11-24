@@ -1,7 +1,6 @@
 package com.triple.destination_management.domain.user.repository;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,15 +14,17 @@ import com.triple.destination_management.domain.user.constants.Auth;
 import com.triple.destination_management.domain.user.entity.User;
 import com.triple.destination_management.global.config.JpaConfig;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @DataJpaTest
 @DisplayName("** [ UserRepositoryTest ] **")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({JpaConfig.class})
 class UserRepositoryTest {
 
-	@Autowired
-	private UserRepository userRepository;
+
+	private final UserRepository userRepository;
+
+	UserRepositoryTest(@Autowired UserRepository userRepository) {this.userRepository = userRepository;}
 
 	@Test
 	@DisplayName("# [1] 유저 아이디(username)로 조회하기")

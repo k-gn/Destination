@@ -26,7 +26,7 @@ import com.triple.destination_management.global.config.security.jwt.JwtProvider;
 import com.triple.destination_management.global.constants.ResponseCode;
 import com.triple.destination_management.global.exception.GeneralException;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @DisplayName("** [ TownControllerTest ] **")
 @WebMvcTest(TownController.class)
 @Import({JwtProvider.class})
@@ -157,6 +157,27 @@ class TownControllerTest {
 	}
 
 	@Test
+	@DisplayName("# [1-5]-[POST] 잘못된 토큰으로 도시 등록하기")
+	void registerTownWithWrongToken() throws Exception {
+		// given
+		TownRequest townRequest = getTownRequest("서울", "대한민국");
+
+		// when & then
+		mvc.perform(post("/api/v1/towns")
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(JwtProperties.JWT_ACCESS_HEADER, JwtProperties.TOKEN_PREFIX + "wrong token")
+			.content(objectMapper.writeValueAsString(townRequest)))
+			.andExpect(status().is4xxClientError())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.success").value(false))
+			.andExpect(jsonPath("$.code").value(ResponseCode.ACCESS_DENIED.getCode()))
+			.andExpect(jsonPath("$.message").value(ResponseCode.ACCESS_DENIED.getMessage()))
+		;
+
+		then(townService).should(never()).registerTown(townRequest);
+	}
+
+	@Test
 	@DisplayName("# [2-1]-[PUT] 도시 수정하기")
 	void modifyTown() throws Exception {
 		// given
@@ -252,6 +273,28 @@ class TownControllerTest {
 	}
 
 	@Test
+	@DisplayName("# [2-5]-[PUT] 잘못된 토큰으로 도시 수정하기")
+	void modifyTownWithWrongToken() throws Exception {
+		// given
+		Long townId = 1L;
+		TownRequest townRequest = getTownRequest("서울", "대한민국");
+
+		// when & then
+		mvc.perform(put("/api/v1/towns/" + townId)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(JwtProperties.JWT_ACCESS_HEADER, JwtProperties.TOKEN_PREFIX + "wrong token")
+			.content(objectMapper.writeValueAsString(townRequest)))
+			.andExpect(status().is4xxClientError())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.success").value(false))
+			.andExpect(jsonPath("$.code").value(ResponseCode.ACCESS_DENIED.getCode()))
+			.andExpect(jsonPath("$.message").value(ResponseCode.ACCESS_DENIED.getMessage()))
+		;
+
+		then(townService).should(never()).modifyTown(townId, townRequest);
+	}
+
+	@Test
 	@DisplayName("# [3-1]-[DELETE] 도시 삭제하기")
 	void removeTown() throws Exception {
 		// given
@@ -281,6 +324,26 @@ class TownControllerTest {
 
 		// when & then
 		mvc.perform(delete("/api/v1/towns/" + townId)
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().is4xxClientError())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.success").value(false))
+			.andExpect(jsonPath("$.code").value(ResponseCode.ACCESS_DENIED.getCode()))
+			.andExpect(jsonPath("$.message").value(ResponseCode.ACCESS_DENIED.getMessage()))
+		;
+
+		then(townService).should(never()).removeTown(townId);
+	}
+
+	@Test
+	@DisplayName("# [3-3]-[DELETE] 잘못된 토큰으로 도시 삭제하기")
+	void removeTownWithWrongToken() throws Exception {
+		// given
+		Long townId = 1L;
+
+		// when & then
+		mvc.perform(delete("/api/v1/towns/" + townId)
+			.header(JwtProperties.JWT_ACCESS_HEADER, JwtProperties.TOKEN_PREFIX + "wrong token")
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().is4xxClientError())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

@@ -2,8 +2,6 @@ package com.triple.destination_management.domain.town.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.Objects;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +14,16 @@ import com.triple.destination_management.domain.town.dto.TownRequest;
 import com.triple.destination_management.domain.town.entity.Town;
 import com.triple.destination_management.global.config.JpaConfig;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @DataJpaTest
 @DisplayName("** [ TownRepositoryTest ] **")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({JpaConfig.class})
 class TownRepositoryTest {
 
-	@Autowired
-	private TownRepository townRepository;
+	private final TownRepository townRepository;
+
+	TownRepositoryTest(@Autowired TownRepository townRepository) {this.townRepository = townRepository;}
 
 	@Test
 	@DisplayName("# [1] 코드로 도시 조회하기")

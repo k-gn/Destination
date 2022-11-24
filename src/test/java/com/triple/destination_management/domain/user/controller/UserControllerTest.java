@@ -15,13 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.triple.destination_management.domain.user.dto.UserRequest;
-import com.triple.destination_management.domain.user.exception.UserDuplicatedException;
 import com.triple.destination_management.domain.user.service.UserService;
 import com.triple.destination_management.global.config.security.jwt.JwtProvider;
 import com.triple.destination_management.global.constants.ResponseCode;
 import com.triple.destination_management.global.exception.GeneralException;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @DisplayName("** [ UserControllerTest ] **")
 @WebMvcTest(UserController.class)
 class UserControllerTest {
