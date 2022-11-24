@@ -11,8 +11,6 @@ import com.triple.destination_management.domain.town.exception.TownDuplicatedExc
 import com.triple.destination_management.domain.town.exception.TownNotFoundException;
 import com.triple.destination_management.domain.town.repository.TownRepository;
 import com.triple.destination_management.domain.trip.repository.TripRepository;
-import com.triple.destination_management.global.constants.ResponseCode;
-import com.triple.destination_management.global.exception.GeneralException;
 
 import lombok.RequiredArgsConstructor;
 

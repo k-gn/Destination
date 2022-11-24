@@ -141,6 +141,21 @@ class TownServiceTest {
 	}
 
 	@Test
+	@DisplayName("# [3-3] 존재하지 않는 도시 삭제하기")
+	void removeNotExistTown() {
+		// given
+		Long townId = -99999L;
+
+		// when
+		Throwable thrown = catchThrowable(() -> townService.removeTown(townId));
+
+		// then
+		assertThat(thrown)
+			.isInstanceOf(GeneralException.class)
+			.hasMessageContaining(ResponseCode.NOT_FOUND.getMessage());
+	}
+
+	@Test
 	@DisplayName("# [4-1] 단일 도시 조회하기")
 	void findTown() {
 		// given

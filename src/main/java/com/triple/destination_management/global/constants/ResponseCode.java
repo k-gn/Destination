@@ -20,6 +20,7 @@ public enum ResponseCode {
 	DUPLICATED_REQUEST(400, ResponseCategory.CLIENT_SIDE, "Duplicated request"),
 	TYPE_MISS_MATCHED(400, ResponseCategory.CLIENT_SIDE, "Type miss matched"),
 	REMOVE_DEPENDENCY(400, ResponseCategory.CLIENT_SIDE, "remove town dependency"),
+	ACCESS_DENIED(400, ResponseCategory.CLIENT_SIDE, "Access denied"),
 
 	// 5xx error case
 	INTERNAL_ERROR(500, ResponseCategory.SERVER_SIDE, "Internal error"),

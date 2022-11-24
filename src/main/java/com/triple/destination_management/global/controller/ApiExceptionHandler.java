@@ -2,14 +2,13 @@ package com.triple.destination_management.global.controller;
 
 import java.util.Objects;
 
-import javax.validation.ConstraintViolationException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -46,6 +45,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	) {
 		return handleExceptionInternal(
 			ex, ResponseCode.INTERNAL_ERROR, HttpHeaders.EMPTY, HttpStatus.INTERNAL_SERVER_ERROR, request);
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<Object> accessDeniedException(
+		AccessDeniedException ex,
+		WebRequest request
+	) {
+		return handleExceptionInternal(
+			ex, ResponseCode.ACCESS_DENIED, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request);
 	}
 
 	@Override

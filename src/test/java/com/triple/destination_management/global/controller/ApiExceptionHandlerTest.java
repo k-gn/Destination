@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -70,5 +71,21 @@ class ApiExceptionHandlerTest {
 			.hasFieldOrPropertyWithValue("body", ApiErrorResponse.of(false, ResponseCode.INTERNAL_ERROR, ex))
 			.hasFieldOrPropertyWithValue("headers", HttpHeaders.EMPTY)
 			.hasFieldOrPropertyWithValue("statusCode", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@DisplayName("# [3] 권한 오류")
+	@Test
+	void accessDeniedException() {
+		// Given
+		AccessDeniedException ex = new AccessDeniedException(ResponseCode.ACCESS_DENIED.getMessage());
+
+		// When
+		ResponseEntity<Object> response = exceptionHandler.accessDeniedException(ex, webRequest);
+
+		// Then
+		assertThat(response)
+			.hasFieldOrPropertyWithValue("body", ApiErrorResponse.of(false, ResponseCode.ACCESS_DENIED, ex))
+			.hasFieldOrPropertyWithValue("headers", HttpHeaders.EMPTY)
+			.hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST);
 	}
 }
