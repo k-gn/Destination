@@ -23,8 +23,9 @@ import com.triple.destination_management.global.exception.GeneralException;
 @Import({JpaConfig.class, BCryptPasswordEncoder.class, UserService.class})
 class UserServiceTest {
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
+
+	UserServiceTest(@Autowired UserService userService) {this.userService = userService;}
 
 	@Test
 	@DisplayName("# [1-1] 유저 회원가입하기")

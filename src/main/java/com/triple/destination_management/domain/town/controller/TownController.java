@@ -10,14 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.triple.destination_management.domain.town.dto.TownRequest;
 import com.triple.destination_management.domain.town.service.TownService;
-import com.triple.destination_management.global.config.security.jwt.JwtProperties;
-import com.triple.destination_management.global.config.security.jwt.JwtProvider;
 import com.triple.destination_management.global.dto.ApiDataResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -63,10 +60,7 @@ public class TownController {
 	 * 단일 도시 조회하기
 	 */
 	@GetMapping("/{townId}")
-	public ResponseEntity<?> findTown(
-		@PathVariable Long townId,
-		@RequestHeader(name = JwtProperties.JWT_ACCESS_HEADER, required = false) String token
-	) {
+	public ResponseEntity<?> findTown(@PathVariable Long townId) {
 		return ResponseEntity.ok(ApiDataResponse.of(townService.findTown(townId)));
 	}
 

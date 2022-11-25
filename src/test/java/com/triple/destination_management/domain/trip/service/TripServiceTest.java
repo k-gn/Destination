@@ -23,21 +23,29 @@ import com.triple.destination_management.global.config.JpaConfig;
 import com.triple.destination_management.global.constants.ResponseCode;
 import com.triple.destination_management.global.exception.GeneralException;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @DataJpaTest
 @DisplayName("** [ TripServiceTest ] **")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({JpaConfig.class, TripService.class})
 class TripServiceTest {
 
-	@Autowired
-	private TripService tripService;
 
-	@Autowired
-	private TownRepository townRepository;
+	private final TripService tripService;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final TownRepository townRepository;
+
+	private final UserRepository userRepository;
+
+	TripServiceTest(
+		@Autowired TripService tripService,
+		@Autowired TownRepository townRepository,
+		@Autowired UserRepository userRepository
+	) {
+		this.tripService = tripService;
+		this.townRepository = townRepository;
+		this.userRepository = userRepository;
+	}
 
 	@Test
 	@DisplayName("# [1-1] 여행 등록하기")

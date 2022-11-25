@@ -18,21 +18,28 @@ import com.triple.destination_management.domain.user.entity.User;
 import com.triple.destination_management.domain.user.repository.UserRepository;
 import com.triple.destination_management.global.config.JpaConfig;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @DataJpaTest
 @DisplayName("** [ TripRepositoryTest ] **")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({JpaConfig.class})
 class TripRepositoryTest {
 
-	@Autowired
-	private TripRepository tripRepository;
+	private final TripRepository tripRepository;
 
-	@Autowired
-	private TownRepository townRepository;
+	private final TownRepository townRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
+
+	TripRepositoryTest(
+		@Autowired TripRepository tripRepository,
+		@Autowired TownRepository townRepository,
+		@Autowired UserRepository userRepository
+	) {
+		this.tripRepository = tripRepository;
+		this.townRepository = townRepository;
+		this.userRepository = userRepository;
+	}
 
 	@Test
 	@DisplayName("# [1] 도시로 단일 여행 조회하기")
@@ -98,6 +105,11 @@ class TripRepositoryTest {
 	}
 
 	private User getUser() {
-		return User.builder().username("gyul").password("1234").name("김규남").role(Auth.ROLE_USER).build();
+		return User.builder()
+			.username("gyul")
+			.password("1234")
+			.name("김규남")
+			.role(Auth.ROLE_USER)
+			.build();
 	}
 }
