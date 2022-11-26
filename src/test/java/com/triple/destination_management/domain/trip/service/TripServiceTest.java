@@ -54,7 +54,7 @@ class TripServiceTest {
 		User user = getUser();
 		User savedUser = userRepository.save(user);
 
-		Town town = getTownEntity("서울", "대한민국");
+		Town town = getTown("서울", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		LocalDateTime startDate = LocalDateTime.now().plusDays(5);
@@ -80,7 +80,7 @@ class TripServiceTest {
 		User user = getUser();
 		User savedUser = userRepository.save(user);
 
-		Town town = getTownEntity("서울", "대한민국");
+		Town town = getTown("서울", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		LocalDateTime startDate = LocalDateTime.now().plusDays(10);
@@ -124,7 +124,7 @@ class TripServiceTest {
 		// given
 		Long userId = -99999L;
 
-		Town town = getTownEntity("서울", "대한민국");
+		Town town = getTown("서울", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		LocalDateTime startDate = LocalDateTime.now().plusDays(5);
@@ -147,7 +147,7 @@ class TripServiceTest {
 		User user = getUser();
 		User savedUser = userRepository.save(user);
 
-		Town town = getTownEntity("부산", "대한민국");
+		Town town = getTown("부산", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		LocalDateTime startDate = LocalDateTime.now().plusDays(5);
@@ -180,7 +180,7 @@ class TripServiceTest {
 		User user = getUser();
 		User savedUser = userRepository.save(user);
 
-		Town town = getTownEntity("부산", "대한민국");
+		Town town = getTown("부산", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		Long tripId = -99999L;
@@ -204,7 +204,7 @@ class TripServiceTest {
 		User user = getUser();
 		User savedUser = userRepository.save(user);
 
-		Town town = getTownEntity("부산", "대한민국");
+		Town town = getTown("부산", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		LocalDateTime startDate = LocalDateTime.now().plusDays(5);
@@ -233,7 +233,7 @@ class TripServiceTest {
 		User user = getUser();
 		User savedUser = userRepository.save(user);
 
-		Town town = getTownEntity("부산", "대한민국");
+		Town town = getTown("부산", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		LocalDateTime startDate = LocalDateTime.now().plusDays(5);
@@ -263,7 +263,7 @@ class TripServiceTest {
 		User user = getUser();
 		User savedUser = userRepository.save(user);
 
-		Town town = getTownEntity("부산", "대한민국");
+		Town town = getTown("부산", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		LocalDateTime startDate = LocalDateTime.now().plusDays(5);
@@ -296,7 +296,7 @@ class TripServiceTest {
 		User user2 = getUser("user2", "1234", "유저2");
 		User savedUser2 = userRepository.save(user2);
 
-		Town town = getTownEntity("부산", "대한민국");
+		Town town = getTown("부산", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		LocalDateTime startDate = LocalDateTime.now().plusDays(5);
@@ -322,7 +322,7 @@ class TripServiceTest {
 	@DisplayName("# [3-1] 여행 삭제하기")
 	void removeTrip() {
 		// given
-		Town town = getTownEntity("서울", "대한민국");
+		Town town = getTown("서울", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		User user = getUser();
@@ -352,7 +352,7 @@ class TripServiceTest {
 		User user2 = getUser("user2", "1234", "유저2");
 		User savedUser2 = userRepository.save(user2);
 
-		Town town = getTownEntity("서울", "대한민국");
+		Town town = getTown("서울", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		LocalDateTime start = getDateTime(5);
@@ -403,7 +403,7 @@ class TripServiceTest {
 	@DisplayName("# [4-1] 단일 여행 조회하기")
 	void findTrip() {
 		// given
-		Town town = getTownEntity("부산", "대한민국");
+		Town town = getTown("부산", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		User user = getUser();
@@ -449,7 +449,7 @@ class TripServiceTest {
 	@DisplayName("# [4-3] 잘못된 유저 아이디로 단일 여행 조회하기")
 	void findTownWithoutWrongUserId() {
 		// given
-		Town town = getTownEntity("부산", "대한민국");
+		Town town = getTown("부산", "대한민국");
 		Town savedTown = townRepository.save(town);
 
 		User user = getUser();
@@ -475,7 +475,7 @@ class TripServiceTest {
 		return LocalDateTime.now().plusDays(day);
 	}
 
-	private Town getTownEntity(
+	private Town getTown(
 		String name,
 		String country
 	) {

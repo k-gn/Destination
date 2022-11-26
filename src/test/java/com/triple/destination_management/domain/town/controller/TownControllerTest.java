@@ -107,7 +107,6 @@ class TownControllerTest {
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$.success").value(false))
 			.andExpect(jsonPath("$.code").value(ResponseCode.VALIDATION_ERROR.getCode()))
-			// TODO: 예외 메시지 가져올 수 있는 방법 찾아보기
 			.andExpect(jsonPath("$.message").value("국가를 입력해주세요!"))
 		;
 
