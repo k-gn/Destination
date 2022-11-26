@@ -17,11 +17,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.triple.destination_management.domain.user.entity.User;
 import com.triple.destination_management.domain.user.repository.UserRepository;
 import com.triple.destination_management.global.config.security.jwt.JwtProvider;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -35,29 +34,28 @@ public class AcceptanceTest {
 
 	private final DataSource dataSource;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	public AcceptanceTest(
 		@Autowired MockMvc mvc,
 		@Autowired ObjectMapper objectMapper,
 		@Autowired JwtProvider jwtProvider,
-		@Autowired DataSource dataSource
+		@Autowired DataSource dataSource,
+		@Autowired UserRepository userRepository
 	) {
 		this.mvc = mvc;
 		this.objectMapper = objectMapper;
 		this.jwtProvider = jwtProvider;
 		this.dataSource = dataSource;
+		this.userRepository = userRepository;
 	}
 
 	@BeforeAll
 	public void init() {
-		if (userRepository.findAll().size() == 0) {
-			try (Connection conn = dataSource.getConnection()) {
-				ScriptUtils.executeSqlScript(conn, new ClassPathResource("/h2/data.sql"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		try (Connection conn = dataSource.getConnection()) {
+			ScriptUtils.executeSqlScript(conn, new ClassPathResource("/h2/data.sql"));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
