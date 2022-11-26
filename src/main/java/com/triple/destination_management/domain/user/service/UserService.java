@@ -4,7 +4,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sun.jdi.request.DuplicateRequestException;
 import com.triple.destination_management.domain.user.constants.Auth;
 import com.triple.destination_management.domain.user.dto.UserRequest;
 import com.triple.destination_management.domain.user.entity.User;
