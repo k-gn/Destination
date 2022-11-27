@@ -1,5 +1,11 @@
 package com.triple.destination_management.domain.trip.dto;
 
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.triple.destination_management.domain.trip.entity.Trip;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +15,31 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TripResponse {
 
 	private Long id;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd a HH:mm:ss")
+	private LocalDateTime startDate;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd a HH:mm:ss")
+	private LocalDateTime endDate;
+
+	private String name;
+
+	private String country;
+
+	private String area;
+
+	public static TripResponse entityToDto(Trip trip) {
+		return TripResponse.builder()
+			.id(trip.getId())
+			.startDate(trip.getStartDate())
+			.endDate(trip.getEndDate())
+			.name(trip.getTown().getName())
+			.country(trip.getTown().getCountry())
+			.area(trip.getTown().getArea())
+			.build();
+	}
 }

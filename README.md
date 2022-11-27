@@ -1,2 +1,17 @@
-# Destination_management
-destination management rest api
+# 여행지 관리하기
+
+유저가 회원가입 및 로그인 후 발급된 토큰으로 도시와 여행 API 를 사용할 수 있습니다.
+
+> 로컬 실행 방법
+
+1. **zip** 파일을 풀어줍니다!
+2. 압축이 해제된 파일을 인텔리제이로 **Open** 해줍니다!
+3. prod 환경일 경우 application-prod.yml 파일에서 자신의 Mysql 계정으로 변경하고, 
+trip_corp 데이터베이스를 생성해야 합니다.
+
+---
+> 버전 정보
+- Java 11
+- Gradle 7.5.1
+
+
