@@ -5,6 +5,7 @@
 > 로컬 실행 방법
 
 방법 1. **zip** 파일을 받은 후 인텔리제이로 Open 하기
+
 방법 2. 프로젝트를 clone 받고 인텔리제이로 Open 하기
 
 추가 - prod 환경일 경우 application-prod.yml 파일에서 자신의 Mysql 계정으로 변경하고, trip_corp 데이터베이스를 생성해야 합니다.
