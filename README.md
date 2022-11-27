@@ -16,4 +16,15 @@
 - Java 11
 - Gradle 7.5.1
 
+---
+
+> 사용 기술 스택
+
+- Java
+- Spring boot
+- MySQL, H2
+- Spring JPA
+- QueryDSL
+- Spring Security / JWT
+
 
