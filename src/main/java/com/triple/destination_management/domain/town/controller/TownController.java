@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,7 +69,7 @@ public class TownController {
 	 * 사용자별 도시 목록 조회하기
 	 */
 	@GetMapping
-	public ResponseEntity<?> findAll() {
-		return ResponseEntity.ok(ApiDataResponse.of(""));
+	public ResponseEntity<?> findAll(@AuthenticationPrincipal Long userId) {
+		return ResponseEntity.ok(ApiDataResponse.of(townService.findTownsByUser(userId)));
 	}
 }

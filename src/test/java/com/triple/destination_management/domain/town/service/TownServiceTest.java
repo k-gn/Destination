@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.triple.destination_management.domain.town.dto.TownRequest;
 import com.triple.destination_management.domain.town.dto.TownResponse;
 import com.triple.destination_management.domain.town.entity.Town;
+import com.triple.destination_management.domain.town.repository.TownRepository;
 import com.triple.destination_management.domain.trip.entity.Trip;
 import com.triple.destination_management.domain.trip.repository.TripRepository;
 import com.triple.destination_management.global.config.JpaConfig;
@@ -208,6 +209,13 @@ class TownServiceTest {
 		return TownRequest.builder()
 			.name(name)
 			.country(country)
+			.build();
+	}
+
+	private Town getTown(String name) {
+		return Town.builder()
+			.name(name)
+			.country("대한민국")
 			.build();
 	}
 }

@@ -28,7 +28,8 @@ public class UserSearchController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> registerSearch(
 		@PathVariable Long townId,
-		@AuthenticationPrincipal Long userId) {
+		@AuthenticationPrincipal Long userId
+	) {
 		return ResponseEntity.ok(ApiDataResponse.of(userSearchService.registerSearch(townId, userId)));
 	}
 

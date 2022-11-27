@@ -60,7 +60,7 @@ class UserSearchServiceTest {
 	@BeforeEach
 	public void init() {
 		for (String name : townNames) {
-			Town town = getTown(name);
+			Town town = getTown(name, "대한민국");
 			Town savedTown = townRepository.save(town);
 			towns.add(savedTown);
 		}
@@ -172,13 +172,6 @@ class UserSearchServiceTest {
 		return Town.builder()
 			.name(name)
 			.country(country)
-			.build();
-	}
-
-	private Town getTown(String name) {
-		return Town.builder()
-			.name(name)
-			.country("대한민국")
 			.build();
 	}
 
