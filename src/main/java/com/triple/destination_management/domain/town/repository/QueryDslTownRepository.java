@@ -17,5 +17,5 @@ public interface QueryDslTownRepository {
 
 	List<TownResponse> findRecentInsertTowns(TownFindDto getTownFindDto);
 
-	List<TownResponse> findRandomTowns(Integer size);
+	List<TownResponse> findRandomTowns(TownFindDto getTownFindDto);
 }

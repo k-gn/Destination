@@ -9,6 +9,8 @@
 3. prod 환경일 경우 application-prod.yml 파일에서 자신의 Mysql 계정으로 변경하고, 
 trip_corp 데이터베이스를 생성해야 합니다.
 
+---
+> 버전 정보
 - Java 11
 - Gradle 7.5.1
 

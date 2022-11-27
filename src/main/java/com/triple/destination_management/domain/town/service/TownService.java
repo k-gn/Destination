@@ -56,6 +56,9 @@ public class TownService {
 		Long townId,
 		TownRequest townRequest
 	) {
+		if (isDuplicatedTown(TownRequest.dtoToEntity(townRequest)))
+			throw new TownDuplicatedException();
+
 		Town town = getTownById(townId);
 		town.setCountry(townRequest.getCountry());
 		town.setArea(townRequest.getArea());
@@ -140,7 +143,8 @@ public class TownService {
 		List<TownResponse> townResponses,
 		List<Long> townIds
 	) {
-		return townRepository.findRandomTowns(getSize(travelingTowns, townResponses));
+		TownFindDto townFindDto = TownFindDto.getTownFindDto(null, townIds, getSize(travelingTowns, townResponses));
+		return townRepository.findRandomTowns(townFindDto);
 	}
 
 	private List<TownResponse> getRecentSearchTowns(

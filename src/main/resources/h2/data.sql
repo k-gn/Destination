@@ -1,7 +1,7 @@
 -- insert user
-INSERT INTO t_user(user_username, user_password, user_name) VALUES ('gyunam', '$2a$10$LCdnGJ4ssH0o1.h47gSsleUBitnRFjz2ecbuYzEwMRmU..xqdXQmq', '규남');
-INSERT INTO t_user(user_username, user_password, user_name) VALUES ('minsoo', '$2a$10$LCdnGJ4ssH0o1.h47gSsleUBitnRFjz2ecbuYzEwMRmU..xqdXQmq', '민수');
-INSERT INTO t_user(user_username, user_password, user_name) VALUES ('gildong', '$2a$10$LCdnGJ4ssH0o1.h47gSsleUBitnRFjz2ecbuYzEwMRmU..xqdXQmq', '길동');
+INSERT INTO t_user(user_username, user_password, user_name, user_role) VALUES ('gyunam', '$2a$10$LCdnGJ4ssH0o1.h47gSsleUBitnRFjz2ecbuYzEwMRmU..xqdXQmq', '규남', 'ROLE_USER');
+INSERT INTO t_user(user_username, user_password, user_name, user_role) VALUES ('minsoo', '$2a$10$LCdnGJ4ssH0o1.h47gSsleUBitnRFjz2ecbuYzEwMRmU..xqdXQmq', '민수', 'ROLE_USER');
+INSERT INTO t_user(user_username, user_password, user_name, user_role) VALUES ('gildong', '$2a$10$LCdnGJ4ssH0o1.h47gSsleUBitnRFjz2ecbuYzEwMRmU..xqdXQmq', '길동', 'ROLE_USER');
 
 -- insert town
 INSERT INTO t_town(town_country, town_name, town_code) VALUES ('대한민국', '부산', 1);
@@ -18,20 +18,16 @@ INSERT INTO t_town(town_country, town_name, town_code) VALUES ('대한민국', '
 INSERT INTO t_town(town_country, town_name, town_code) VALUES ('대한민국', '포항', 12);
 
 -- insert trip
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2022-11-20', '2022-11-22', 1, 1);
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2022-11-23', '2022-11-24', 6, 1);
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2022-11-25', '2022-11-26', 7, 1);
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2022-11-26', '2022-11-29', 3, 1);
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2022-11-30', '2022-12-03', 2, 1);
+INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES (DATEADD(day, -10, CURRENT_TIMESTAMP), DATEADD(day, -5, CURRENT_TIMESTAMP), 1, 1);
+INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES (DATEADD(day, -1, CURRENT_TIMESTAMP), DATEADD(day, 5, CURRENT_TIMESTAMP), 3, 1);
+INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES (DATEADD(day, 10, CURRENT_TIMESTAMP), DATEADD(day, 15, CURRENT_TIMESTAMP), 5, 1);
 
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2023-01-01', '2023-01-20', 3, 1);
+INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES (DATEADD(day, 5, CURRENT_TIMESTAMP), DATEADD(day, 10, CURRENT_TIMESTAMP), 1, 2);
+INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES (DATEADD(day, 15, CURRENT_TIMESTAMP), DATEADD(day, 20, CURRENT_TIMESTAMP), 2, 2);
+INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES (DATEADD(day, 25, CURRENT_TIMESTAMP), DATEADD(day, 30, CURRENT_TIMESTAMP), 3, 2);
 
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2022-12-20', '2022-12-28', 1, 2);
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2022-11-30', '2022-12-03', 2, 2);
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2023-02-01', '2023-02-20', 3, 2);
-
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2023-03-20', '2022-04-28', 1, 3);
-INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES ('2023-01-01', '2023-01-20', 3, 3);
+INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES (DATEADD(day, 10, CURRENT_TIMESTAMP), DATEADD(day, 15, CURRENT_TIMESTAMP), 1, 3);
+INSERT INTO t_trip(trip_start_date, trip_end_date, town_id, user_id) VALUES (DATEADD(day, 20, CURRENT_TIMESTAMP), DATEADD(day, 30, CURRENT_TIMESTAMP), 3, 3);
 
 -- insert search
 INSERT INTO t_user_search(user_id, town_id) VALUES (1, 7);

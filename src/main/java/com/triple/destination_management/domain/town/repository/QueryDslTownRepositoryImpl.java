@@ -39,13 +39,14 @@ public class QueryDslTownRepositoryImpl implements QueryDslTownRepository {
 	}
 
 	@Override
-	public List<TownResponse> findRandomTowns(Integer size) {
+	public List<TownResponse> findRandomTowns(TownFindDto getTownFindDto) {
 		return queryFactory.select(getFields())
 			.from(town)
+			.where(town.id.notIn(getTownFindDto.getIds()))
 			.orderBy(
 				NumberExpression.random().asc()
 			)
-			.limit(size)
+			.limit(getTownFindDto.getSize())
 			.fetch();
 	}
 

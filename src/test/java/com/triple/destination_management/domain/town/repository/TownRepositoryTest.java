@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.triple.destination_management.domain.town.dto.TownFindDto;
 import com.triple.destination_management.domain.town.dto.TownResponse;
@@ -106,10 +106,10 @@ class TownRepositoryTest {
 	@DisplayName("# [3] 무작위 도시 10개 조회하기")
 	void findRandomTowns() {
 		// given
-		Integer size = 10;
+		TownFindDto townFindDto = TownFindDto.getTownFindDto(1L, Collections.emptyList(), 10);
 
 		// when
-		List<TownResponse> townResponses = townRepository.findRandomTowns(size);
+		List<TownResponse> townResponses = townRepository.findRandomTowns(townFindDto);
 
 		// then
 		assertThat(townResponses)
@@ -158,9 +158,6 @@ class TownRepositoryTest {
 
 		// when
 		List<TownResponse> scheduledTowns = townRepository.findScheduledTowns(townFindDto);
-
-		scheduledTowns.forEach(System.out::println);
-		System.out.println("scheduledTowns.size() = " + scheduledTowns.size());
 
 		// then
 		assertThat(scheduledTowns)
@@ -211,8 +208,6 @@ class TownRepositoryTest {
 
 		// when
 		List<TownResponse> recentInsertTowns = townRepository.findRecentInsertTowns(townFindDto);
-
-		// recentInsertTowns.forEach(System.out::println);
 
 		// then
 		assertThat(recentInsertTowns)

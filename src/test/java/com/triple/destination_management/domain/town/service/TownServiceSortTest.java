@@ -3,6 +3,8 @@ package com.triple.destination_management.domain.town.service;
 import static org.assertj.core.api.Assertions.*;
 
 import java.sql.Connection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
@@ -39,16 +41,12 @@ class TownServiceSortTest {
 
 	private final TownService townService;
 
-	private final TripRepository tripRepository;
-
 	public TownServiceSortTest(
 		@Autowired DataSource dataSource,
-		@Autowired TownService townService,
-		@Autowired TripRepository tripRepository
+		@Autowired TownService townService
 	) {
 		this.dataSource = dataSource;
 		this.townService = townService;
-		this.tripRepository = tripRepository;
 	}
 
 	@BeforeAll
@@ -61,9 +59,27 @@ class TownServiceSortTest {
 	}
 
 	@Test
-	@DisplayName("1. 제목")
+	@DisplayName("# [1] 사용자별 도시 목록 조회")
 	void given_when_then() {
+		// given
+		Long userId = 1L;
+		
+		// when
+		List<TownResponse> townResponses = townService.findTownsByUser(userId);
+		townResponses.forEach(System.out::println);
 
-		townService.findTownsByUser(1L);
+		// then
+		assertThat(townResponses)
+			.isNotNull()
+			.hasSize(11)
+			.element(0)
+				.hasFieldOrPropertyWithValue("name", "대구")
+				.hasFieldOrPropertyWithValue("country", "대한민국");
+
+		List<String> names = List.of("대구", "제주", "포항", "전남", "충남", "충북", "전북", "광주", "수원", "대전", "서울");
+		List<String> sortNames = townResponses.stream().map(TownResponse::getName).collect(Collectors.toList());
+
+		assertThat(sortNames)
+			.containsAll(names);
 	}
 }
