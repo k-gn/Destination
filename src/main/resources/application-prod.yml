@@ -11,13 +11,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        jdbc:
-          batch_size: 1000
-          order_inserts: true
-          order_updates: true
-        default_batch_fetch_size: 1000
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
       jdbc:
         time_zone: Asia/Seoul
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

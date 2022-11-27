@@ -1,7 +1,5 @@
 package com.triple.destination_management.domain;
 
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.never;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -25,10 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.triple.destination_management.domain.user.dto.UserLoginRequest;
 import com.triple.destination_management.domain.user.dto.UserRequest;
-import com.triple.destination_management.domain.user.repository.UserRepository;
-import com.triple.destination_management.global.config.security.jwt.JwtProvider;
 import com.triple.destination_management.global.constants.ResponseCode;
-import com.triple.destination_management.global.exception.GeneralException;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -60,7 +55,6 @@ public class UserAcceptanceTest {
 			e.printStackTrace();
 		}
 	}
-
 
 	@Test
 	@DisplayName("# [1-1]-[POST] 유저 회원가입하기")

@@ -106,11 +106,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpStatus status,
 		WebRequest request
 	) {
-		logger.error("======================================================================");
-		logger.error("Exception : {}, {}", responseCode.getCode(), responseCode.getMessage());
-		logger.error("======================================================================");
-		ex.printStackTrace();
-
 		return super.handleExceptionInternal(ex,
 			ApiErrorResponse.of(false, responseCode.getCode(), responseCode.getMessage()), headers, status, request
 		);
@@ -121,11 +116,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		WebRequest request,
 		String message
 	) {
-		logger.error("======================================================================");
-		logger.error("Validation Exception: {} - {}", ex.getMessage(), message);
-		logger.error("======================================================================");
-		ex.printStackTrace();
-
 		return super.handleExceptionInternal(
 			ex, ApiErrorResponse.of(false, ResponseCode.VALIDATION_ERROR.getCode(),
 				ResponseCode.VALIDATION_ERROR.getMessage(message)
